@@ -31,21 +31,6 @@
       background-color: var(--bg);
       color: var(--text);
     }
-    header {
-      text-align: center;
-      padding: 2rem 1rem 1rem;
-      background-color: var(--card);
-    }
-    header img {
-      max-width: 220px;
-      height: auto;
-      display: block;
-      margin: 0 auto 0.5rem;
-    }
-    header p {
-      font-size: 1.2rem;
-      margin: 0;
-    }
     .video-container {
       display: flex;
       flex-direction: column;
@@ -56,6 +41,7 @@
       color: #ffffff;
       font-size: 1.8rem;
       margin-bottom: 1rem;
+      margin-top: 0rem;
       text-align: center;
     }
     .video-frame {
@@ -200,14 +186,9 @@
     .botao-contactar:hover {
       opacity: 0.9;
     }
-
-
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logotipo da Blacknous Assessoria Contábil" />
-  </header>
   <div class="video-container">
     <h2>Sua contabilidade está cuidando do seu CNPJ do jeito certo?</h2>
     <div class="video-frame">
@@ -277,21 +258,9 @@
       botao.className = 'botao-contactar';
       botao.textContent = 'Contactar Agora';
       container.appendChild(botao);
-    }, 380000);
+    }, 870000);
 
     document.getElementById('ano-atual').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
