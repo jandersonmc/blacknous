@@ -31,38 +31,24 @@
       background-color: var(--bg);
       color: var(--text);
     }
-    header {
-      text-align: center;
-      padding: 2rem 1rem 1rem;
-      background-color: var(--card);
-    }
-    header img {
-      max-width: 220px;
-      height: auto;
-      display: block;
-      margin: 0 auto 0.5rem;
-    }
-    header p {
-      font-size: 1.2rem;
-      margin: 0;
-    }
     .video-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 2rem 1rem 0;
     }
-    .video-container h2 {
+    .video-container h1 {
       color: #ffffff;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       margin-bottom: 1rem;
+      margin-top: 1;
       text-align: center;
     }
     .video-frame {
       position: relative;
-      width: 100%;
+      width: 80%;
       max-width: 800px;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 9 /15.8;
       border: 4px solid;
       border-image: linear-gradient(to right, #00c6ff, #0072ff) 1;
       overflow: hidden;
@@ -87,13 +73,11 @@
     footer p {
       margin: 0.3rem 0;
     }
-
     /*botão em baixo vídeo*/
     #botao-container {
       text-align: center;
       margin-top: 2rem;
     }
-
     .botao-contactar {
       display: inline-block;
       padding: 1.5rem 3rem;
@@ -114,20 +98,17 @@
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logotipo da Blacknous Assessoria Contábil" />
-  </header>
   <div class="video-container">
-    <h2>Aula completa: O manual secreto do MEI</h2>
+    <h1>O manual secreto do MEI</h1>
     <div class="video-frame">
-      <iframe src="https://www.youtube.com/embed/Qs-lJiA1I2w" allow="encrypted-media" allowfullscreen aria-label="Vídeo institucional da Blacknous"></iframe>
+      <iframe src="https://www.youtube.com/embed/V6wOMiBkcLM" allow="encrypted-media" allowfullscreen aria-label="Vídeo institucional da Blacknous"></iframe>
     </div>
   </div>
   <!-- Botão abaixo do vídeo -->
   <div id="botao-container"></div>
   <footer>
     <p>&copy; <span id="ano-atual"></span> Blacknous Assessoria Contábil</p>
-    <p>CRC/PA nº 023305/O-3</p>
+    <p>CRC/PA nº 023305/O</p>
   </footer>
   <script>
     setTimeout(function() {
