@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackonus Contabilidade Digital</title>
+    <style>
+        /* Reset e Base Ultra-Dark */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #02060d;
+            /* Azul escuro financeiro profundo */
+            font-family: 'Orbitron', 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Canvas de Fundo (Gráficos e Fluxo de Dinheiro) */
+        #fintechCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Grade de Monitoramento de Mercado (HUD) */
+        .market-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 242, 254, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Scanner de Linha de Tendência de Alta */
+        .laser-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00f2fe, #4facfe, transparent);
+            box-shadow: 0 0 15px #00f2fe;
+            top: 0;
+            z-index: 2;
+            animation: scanLine 6s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes scanLine {
+            0% {
+                top: -5%;
+            }
+
+            100% {
+                top: 105%;
+            }
+        }
+
+        /* Container Principal */
+        .container {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            padding: 40px;
+            width: 90%;
+            max-width: 1100px;
+        }
+
+        /* HUD Frame - Moldura de Terminal de Finanças */
+        .hud-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.02), rgba(79, 172, 254, 0.02));
+            pointer-events: none;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Cantoneiras High-Tech */
+        .hud-frame::before,
+        .hud-frame::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #00f2fe;
+            border-style: solid;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        .hud-frame::before {
+            top: -2px;
+            left: -2px;
+            border-width: 2px 0 0 2px;
+        }
+
+        .hud-frame::after {
+            bottom: -2px;
+            right: -2px;
+            border-width: 0 2px 2px 0;
+        }
+
+        /* Título Principal - Estilo Algorítmico / Bull Market */
+        .brand-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            line-height: 1.2;
+            position: relative;
+            display: inline-block;
+            margin: 20px 0;
+            /* Efeito de glitch digital no calor do mercado */
+            filter: drop-shadow(0 0 25px rgba(0, 242, 254, 0.6));
+        }
+
+        /* Gradiente do Texto (Ciano Tecnológico para Verde Dinheiro Fluorescente) */
+        .brand-title span {
+            background: linear-gradient(120deg, #ffffff 30%, #00f2fe 60%, #00ff87 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        /* Sub-indicadores decorativos para simular dados da bolsa */
+        .ticker-decor {
+            position: absolute;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #00ff87;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+
+        .ticker-top {
+            top: 10px;
+            left: 15px;
+        }
+
+        .ticker-bottom {
+            bottom: 10px;
+            right: 15px;
+            color: #00f2fe;
+        }
+
+        /* Animações adicionais */
+        @keyframes textGlow {
+            0% {
+                filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.4));
+                transform: scale(0.99);
+            }
+
+            100% {
+                filter: drop-shadow(0 0 30px rgba(0, 255, 135, 0.7));
+                transform: scale(1.01);
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .brand-title {
+                font-size: 2.2rem;
+                letter-spacing: 3px;
+            }
+
+            .container {
+                padding: 25px 15px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="market-grid"></div>
+    <div class="laser-line"></div>
+
+    <canvas id="fintechCanvas"></canvas>
+
+    <div class="container">
+        <div class="hud-frame">
+            <div class="ticker-decor ticker-top">SYS_STATUS: ACTIVE // VAL_INDEX: +24.84% ▲</div>
+            <div class="ticker-decor ticker-bottom">BLACKONUS_CORE_v4.0 // QUANT_ALGO</div>
+        </div>
+
+        <h1 class="brand-title">
+            <span>Blackonus<br>Contabilidade Digital</span>
+        </h1>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('fintechCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Configurações dos elementos financeiros
+        let financialElements = [];
+        let stockGraphPoints = [];
+        const maxDataFlow = 40;
+
+        // Gerador inicial do gráfico em linha de fundo (Simulando Alta Perpétua)
+        function initGraph() {
+            let currentX = 0;
+            let currentY = canvas.height * 0.7; // Começa por baixo
+
+            while (currentX < canvas.width + 100) {
+                stockGraphPoints.push({
+                    x: currentX,
+                    y: currentY
+                });
+                currentX += Math.random() * 80 + 40;
+                // Força a tendência de subir na média (Bolsa em Alta)
+                currentY -= (Math.random() * 60) - 20;
+                if (currentY < canvas.height * 0.1) currentY = canvas.height * 0.4;
+            }
+        }
+        initGraph();
+
+        // Atualiza suavemente o gráfico para dar efeito de tempo real
+        function updateGraph() {
+            for (let i = 0; i < stockGraphPoints.length; i++) {
+                stockGraphPoints[i].x -= 0.5; // Move o gráfico para a esquerda
+                // Pequena oscilação em tempo real
+                stockGraphPoints[i].y += (Math.random() - 0.5) * 1;
+            }
+
+            // Repõe pontos que saíram da tela à esquerda
+            if (stockGraphPoints[0] && stockGraphPoints[0].x < -100) {
+                stockGraphPoints.shift();
+                const lastPoint = stockGraphPoints[stockGraphPoints.length - 1];
+                stockGraphPoints.push({
+                    x: lastPoint.x + (Math.random() * 80 + 40),
+                    y: lastPoint.y - (Math.random() * 60 - 20)
+                });
+            }
+        }
+
+        // Classe para fluxo de Dinheiro ($) e Velas Digitais (Candlesticks) que sobem
+        class FinancialFlow {
+            constructor() {
+                this.reset();
+                // Distribui o início pela tela toda na primeira execução
+                this.y = Math.random() * canvas.height;
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + Math.random() * 100;
+                this.type = Math.random() > 0.4 ? 'currency' : 'candle'; // $ ou Vela de alta
+                this.size = Math.random() * 14 + 10;
+                this.speedY = Math.random() * 1.5 + 0.8; // Velocidade de subida (Alta)
+
+                // Paleta de cores: Verde Dinheiro, Ciano Tech, Branco Luxo
+                const techColors = ['#00ff87', '#00f2fe', '#ffffff', '#4facfe'];
+                this.color = techColors[Math.floor(Math.random() * techColors.length)];
+                this.alpha = Math.random() * 0.4 + 0.1; // Sutil para ficar elegante ao fundo
+                this.candleWidth = Math.random() * 6 + 4;
+                this.candleHeight = Math.random() * 40 + 15;
+            }
+
+            update() {
+                this.y -= this.speedY; // Sempre subindo (Mercado Touro / Bull Market)
+                if (this.y < -50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.strokeStyle = this.color;
+
+                if (this.type === 'currency') {
+                    // Renderiza o símbolo de dinheiro dinamicamente
+                    ctx.font = `900 ${this.size}px monospace`;
+                    ctx.fillText('$', this.x, this.y);
+                } else {
+                    // Renderiza blocos e linhas de gráficos financeiros (Candlestick de Alta)
+                    ctx.lineWidth = 1.5;
+                    // Linha interna do gráfico (pavio da vela)
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(this.x, this.y - this.candleHeight - 10);
+                    ctx.stroke();
+                    // Corpo preenchido do gráfico
+                    ctx.fillRect(this.x - this.candleWidth / 2, this.y - this.candleHeight, this.candleWidth, this.candleHeight);
+                }
+                ctx.restore();
+            }
+        }
+
+        // Inicializa o fluxo financeiro
+        for (let i = 0; i < maxDataFlow; i++) {
+            financialElements.push(new FinancialFlow());
+        }
+
+        // Loop principal de renderização do motor visual
+        function drawEngine() {
+            // Fundo gradiente sutil para rastro digital de dados
+            ctx.fillStyle = 'rgba(2, 6, 13, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Desenha a Linha de Tendência de Mercado Principal (Fundo)
+            updateGraph();
+            ctx.beginPath();
+            ctx.lineWidth = 3;
+            // Cria efeito neon na linha
+            ctx.strokeStyle = '#00f2fe';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#00f2fe';
+
+            for (let i = 0; i < stockGraphPoints.length; i++) {
+                if (i === 0) ctx.moveTo(stockGraphPoints[i].x, stockGraphPoints[i].y);
+                else ctx.lineTo(stockGraphPoints[i].x, stockGraphPoints[i].y);
+            }
+            ctx.stroke();
+
+            // Remove efeitos de sombra para as próximas renderizações por performance
+            ctx.shadowBlur = 0;
+
+            // Preenchimento brilhante abaixo da linha do gráfico
+            ctx.lineTo(stockGraphPoints[stockGraphPoints.length - 1].x, canvas.height);
+            ctx.lineTo(stockGraphPoints[0].x, canvas.height);
+            const graphGradiant = ctx.createLinearGradient(0, canvas.height * 0.4, 0, canvas.height);
+            graphGradiant.addColorStop(0, 'rgba(0, 242, 254, 0.05)');
+            graphGradiant.addColorStop(1, 'transparent');
+            ctx.fillStyle = graphGradiant;
+            ctx.fill();
+
+            // 2. Desenha os dados e dinheiros flutuantes subindo
+            financialElements.forEach(element => {
+                element.update();
+                element.draw();
+            });
+
+            requestAnimationFrame(drawEngine);
+        }
+
+        drawEngine();
+    </script>
+</body>
+
+</html>
