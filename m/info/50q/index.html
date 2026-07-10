@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>50 Questões de Informática - Concursos Nível Médio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="page-header no-print">
+        <div class="header-content">
+            <h1>📚 Informática para Concursos</h1>
+            <p>50 Questões com Resolução Comentada</p>
+            <div class="header-actions">
+                <button id="btn-print" class="btn primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Imprimir Material (A4)
+                </button>
+                <button id="btn-toggle-answers" class="btn secondary">
+                    Mostrar Todas as Resoluções
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="print-header only-print">
+        <h1>Material de Estudo - Informática para Concursos (Nível Médio)</h1>
+        <p>Gabarito e resoluções incluídos.</p>
+    </div>
+
+    <main id="questions-container" class="container">
+        <!-- Questions will be injected here by JS -->
+    </main>
+
+    <footer class="page-footer no-print">
+        <p>Bons estudos e sucesso na sua aprovação!</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
