@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Quiz Gamificado de Informática com 100 perguntas sobre Sistemas Operacionais, Office 365, Redes, Segurança e mais. Teste seus conhecimentos para concursos!">
+  <title>🎮 Quiz de Informática | 100 Perguntas Gamificadas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Floating Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Confetti Container -->
+  <div class="confetti-container" id="confetti-container"></div>
+
+  <!-- Feedback Overlay -->
+  <div class="feedback-overlay" id="feedback-overlay">
+    <span class="feedback-icon" id="feedback-icon">✅</span>
+  </div>
+
+  <!-- Streak Badge -->
+  <div class="streak-badge" id="streak-badge">🔥 3x Sequência!</div>
+
+  <!-- Motivational Bar -->
+  <div class="motivational-bar" id="motivational-bar">💪 Você está arrasando!</div>
+
+  <!-- Music Toggle -->
+  <button class="music-toggle" id="music-toggle" title="Ativar/Desativar Música">🎵</button>
+
+  <!-- ============================================================ -->
+  <!-- RESUME MODAL -->
+  <!-- ============================================================ -->
+  <div class="resume-modal-overlay" id="resume-modal">
+    <div class="resume-modal">
+      <span class="resume-modal-emoji">📂</span>
+      <h2 class="resume-modal-title">Progresso Encontrado!</h2>
+      <p class="resume-modal-text" id="resume-progress-text">Você tem um jogo salvo.</p>
+      <div class="resume-modal-buttons">
+        <button class="btn-resume" id="btn-resume">▶️ Continuar de Onde Parei</button>
+        <button class="btn-new-game" id="btn-new-game">🔄 Começar do Início</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- APP CONTAINER -->
+  <!-- ============================================================ -->
+  <div class="app-container">
+
+    <!-- ======================================== -->
+    <!-- START SCREEN -->
+    <!-- ======================================== -->
+    <div class="screen active" id="start-screen">
+      <div class="start-screen">
+        <span class="logo-emoji">🧠</span>
+        <h1>Quiz de Informática</h1>
+        <p class="subtitle">
+          🎯 100 perguntas gamificadas para testar seus conhecimentos!<br>
+          Prepare-se para o desafio e domine os temas mais cobrados em concursos. 🚀
+        </p>
+
+        <div class="topics-grid">
+          <div class="topic-card">
+            <span class="topic-emoji">💻</span>
+            <span>Windows 10</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">🐧</span>
+            <span>Linux SUSE</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">📝</span>
+            <span>Word 365</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">📊</span>
+            <span>Excel 365</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">🎯</span>
+            <span>PowerPoint 365</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">🌐</span>
+            <span>Redes</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">🌍</span>
+            <span>Navegadores</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">📧</span>
+            <span>E-mail</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">📱</span>
+            <span>Redes Sociais</span>
+          </div>
+          <div class="topic-card">
+            <span class="topic-emoji">🔒</span>
+            <span>Segurança</span>
+          </div>
+        </div>
+
+        <button class="btn-start" id="btn-start">
+          🚀 Iniciar Quiz
+        </button>
+      </div>
+    </div>
+
+    <!-- ======================================== -->
+    <!-- QUIZ SCREEN -->
+    <!-- ======================================== -->
+    <div class="screen" id="quiz-screen">
+      <div class="quiz-screen">
+        <!-- Header -->
+        <div class="quiz-header">
+          <div class="quiz-info">
+            <div class="question-counter" id="question-counter">
+              Pergunta <span>1</span>/<span style="font-size:1rem">100</span>
+            </div>
+            <div class="score-display">
+              <div class="score-item score-correct">
+                ✅ <span id="score-correct">0</span>
+              </div>
+              <div class="score-item score-wrong">
+                ❌ <span id="score-wrong">0</span>
+              </div>
+            </div>
+          </div>
+          <div class="timer-container" id="timer-container">
+            ⏱️ <span id="timer-display">30s</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card">
+          <div class="category-badge" id="category-badge">💻 Windows 10</div>
+          <p class="question-text" id="question-text">Carregando pergunta...</p>
+          <div class="options-list" id="options-list"></div>
+          <div class="explanation" id="explanation-box" style="display:none;"></div>
+          <button class="btn-next" id="btn-next" style="display:none;">➡️ Próxima Pergunta</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================== -->
+    <!-- RESULTS SCREEN -->
+    <!-- ======================================== -->
+    <div class="screen" id="results-screen">
+      <div class="results-screen">
+        <div class="results-card">
+          <span class="results-emoji" id="result-emoji">🏆</span>
+          <h2 class="results-title" id="result-title">Resultado Final</h2>
+          <p class="results-subtitle" id="result-subtitle">Confira sua performance!</p>
+
+          <!-- Score Circle -->
+          <div class="score-circle-container">
+            <div class="score-circle">
+              <svg viewBox="0 0 200 200">
+                <defs>
+                  <linearGradient id="gradSuccess" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#10b981" />
+                    <stop offset="100%" style="stop-color:#06b6d4" />
+                  </linearGradient>
+                  <linearGradient id="gradWarning" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#f59e0b" />
+                    <stop offset="100%" style="stop-color:#fbbf24" />
+                  </linearGradient>
+                  <linearGradient id="gradDanger" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ef4444" />
+                    <stop offset="100%" style="stop-color:#f87171" />
+                  </linearGradient>
+                </defs>
+                <circle class="score-circle-bg" cx="100" cy="100" r="85" />
+                <circle class="score-circle-fill" id="score-circle-fill" cx="100" cy="100" r="85" />
+              </svg>
+              <div class="score-circle-text">
+                <div class="score-percentage" id="score-percentage">0%</div>
+                <div class="score-label">de acertos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card stat-correct">
+              <div class="stat-emoji">✅</div>
+              <div class="stat-value" id="stat-correct-value">0</div>
+              <div class="stat-label">Acertos</div>
+            </div>
+            <div class="stat-card stat-wrong">
+              <div class="stat-emoji">❌</div>
+              <div class="stat-value" id="stat-wrong-value">0</div>
+              <div class="stat-label">Erros</div>
+            </div>
+            <div class="stat-card stat-total">
+              <div class="stat-emoji">📋</div>
+              <div class="stat-value" id="stat-total-value">100</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+
+          <!-- Category Breakdown -->
+          <div class="category-stats">
+            <h3>📊 Desempenho por Tema</h3>
+            <div id="category-stats-list"></div>
+          </div>
+
+          <!-- Restart Button -->
+          <button class="btn-restart" id="btn-restart">
+            🔄 Jogar Novamente
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
