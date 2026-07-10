@@ -1,0 +1,452 @@
+const fs = require('fs');
+const path = require('path');
+
+const temas = [
+  {
+    title: "Sistemas Operacionais",
+    icon: "💻",
+    cards: [
+      {
+        title: "1.1 Conceitos Fundamentais",
+        content: `
+        <ul>
+            <li><strong>Hardware vs Software:</strong> Hardware é a parte física (o que você chuta). Software é a parte lógica (o que você xinga).</li>
+            <li><strong>Firmware:</strong> Software embutido no hardware (ex: BIOS da placa-mãe).</li>
+            <li><strong>Kernel (Núcleo):</strong> Coração do Sistema Operacional. É a camada de software mais próxima do hardware, gerenciando memória, processador e dispositivos.</li>
+            <li><strong>Shell (Interpretador):</strong> É a interface entre o usuário e o Kernel. Quando você digita um comando no prompt ou clica num ícone, o Shell traduz isso para o Kernel.</li>
+        </ul>`
+      },
+      {
+        title: "1.2 Windows 10: Arquiteturas 32 e 64 bits",
+        content: `
+        <ul>
+            <li><strong>32 bits (x86):</strong> A arquitetura de 32 bits permite gerenciar, no máximo, cerca de <span class="highlight">4 GB de memória RAM</span>. Um único programa só pode usar até 2 GB.</li>
+            <li><strong>64 bits (x64):</strong> Arquitetura moderna. Permite gerenciar virtualmente até 16 Exabytes de RAM. Mais velocidade e estabilidade.</li>
+            <li><strong>Compatibilidade:</strong> O Windows 64 bits roda normalmente programas antigos de 32 bits. Porém, um Windows 32 bits NÃO roda programas de 64 bits.</li>
+        </ul>`
+      },
+      {
+        title: "1.3 Windows 10: Recursos Nativos",
+        content: `
+        <ul>
+            <li><strong>Windows Defender:</strong> O antivírus nativo da Microsoft. Hoje chamado de Segurança do Windows. Evoluiu e possui excelente proteção contra malwares e ransomwares.</li>
+            <li><strong>BitLocker:</strong> Ferramenta de <span class="highlight">criptografia de disco</span>. Protege os dados caso o notebook ou HD seja roubado. (Disponível nas versões Pro e Enterprise).</li>
+            <li><strong>OneDrive:</strong> Nuvem da Microsoft fortemente integrada ao Windows 10. Permite Salvar Automático e acesso via Explorador de Arquivos.</li>
+            <li><strong>Cortana:</strong> Assistente virtual de produtividade (usa comandos de voz ou texto).</li>
+        </ul>`
+      },
+      {
+        title: "1.4 Windows 10: Atalhos de Teclado de Ouro",
+        content: `
+        <p>A tecla com o símbolo do Windows se chama <strong>WinKey (Win)</strong>.</p>
+        <ul>
+            <li><code>Win + D</code>: Mostra ou oculta a <strong>D</strong>esktop (Área de Trabalho).</li>
+            <li><code>Win + E</code>: Abre o <strong>E</strong>xplorador de Arquivos.</li>
+            <li><code>Win + L</code>: Bloqueia (<strong>L</strong>ock) o computador ou troca de usuário.</li>
+            <li><code>Win + I</code>: Abre as Configurações do Windows (a engrenagem).</li>
+            <li><code>Win + R</code>: Abre a caixa de diálogo Executar (<strong>R</strong>un).</li>
+            <li><code>Alt + Tab</code>: Alterna rapidamente entre as janelas abertas.</li>
+        </ul>`
+      },
+      {
+        title: "1.5 Linux (SUSE): Princípios",
+        content: `
+        <ul>
+            <li><strong>Open Source:</strong> Código-fonte aberto. Qualquer um pode ver, modificar e distribuir. Diferente do Windows (fechado/proprietário).</li>
+            <li><strong>Case Sensitive:</strong> O Linux <span class="highlight">diferencia Maiúsculas de Minúsculas</span>. O arquivo <code>Prova.pdf</code> é totalmente diferente de <code>prova.pdf</code>.</li>
+            <li><strong>Multitarefa Preemptiva e Multiusuário:</strong> Vários usuários podem usar recursos simultaneamente sem travar o sistema.</li>
+            <li><strong>Distribuições (Distros):</strong> O Kernel do Linux é comum a todos, mas as ferramentas e interfaces variam. O <strong>SUSE</strong> é uma distro focada no mundo corporativo.</li>
+        </ul>`
+      },
+      {
+        title: "1.6 Linux: Estrutura de Diretórios (FHS)",
+        content: `
+        <p>No Linux, <span class="highlight">não existe C: ou D:</span>. Tudo começa na Raiz (<code>/</code>).</p>
+        <ul>
+            <li><code>/</code> : O diretório RAIZ. Tudo está dentro dele.</li>
+            <li><code>/home</code> : Onde ficam os arquivos pessoais dos usuários comuns (Documentos, Downloads).</li>
+            <li><code>/root</code> : Diretório pessoal do Superusuário (Administrador supremo).</li>
+            <li><code>/etc</code> : Arquivos de configuração global do sistema (não há executáveis aqui).</li>
+            <li><code>/bin</code> : Binários (executáveis) essenciais e comandos básicos (como ls, cp).</li>
+            <li><code>/var</code> : Arquivos variáveis (arquivos de log, spool de impressão, e-mails).</li>
+        </ul>`
+      },
+      {
+        title: "1.7 Linux: Comandos Essenciais",
+        content: `
+        <ul>
+            <li><code>ls</code>: <strong>L</strong>i<strong>s</strong>tar arquivos e diretórios.</li>
+            <li><code>cd</code>: <strong>C</strong>hange <strong>D</strong>irectory (mudar de pasta).</li>
+            <li><code>pwd</code>: Mostra o caminho da pasta atual onde você está.</li>
+            <li><code>cp</code>: <strong>C</strong>o<strong>p</strong>iar arquivos ou pastas.</li>
+            <li><code>mv</code>: <strong>M</strong>o<strong>v</strong>er (recortar) ou <strong>Renomear</strong> arquivos.</li>
+            <li><code>rm</code>: <strong>R</strong>e<strong>m</strong>over (apagar) arquivos. <em>Atenção: não vai para a lixeira no shell!</em></li>
+            <li><code>chmod</code>: Altera as permissões de acesso (Leitura, Gravação, Execução).</li>
+        </ul>`
+      }
+    ]
+  },
+  {
+    title: "Edição de Textos, Planilhas e Apresentações",
+    icon: "📝",
+    cards: [
+      {
+        title: "2.1 Word: Conceitos Gerais",
+        content: `
+        <ul>
+            <li><strong>Formato Padrão:</strong> <code>.docx</code> (formato XML compactado, mais leve e seguro).</li>
+            <li><strong>Página Inicial:</strong> É a guia mais usada. Contém formatação de Fonte (Negrito, Itálico, Cor), Parágrafo (Alinhamento, Espaçamento) e Estilos.</li>
+            <li><strong>Layout (ou Layout da Página):</strong> Onde configuramos Margens, Orientação (Retrato/Paisagem), Tamanho do papel e Colunas.</li>
+            <li><strong>Referências:</strong> Guia para criar Sumários, Notas de Rodapé, Citações e Bibliografia.</li>
+        </ul>`
+      },
+      {
+        title: "2.2 Word: Atalhos Brasileiros (Cai muito!)",
+        content: `
+        <p>No Brasil (Word em PT-BR), os atalhos são traduzidos. <span class="highlight">Cuidado com o Ctrl+T!</span></p>
+        <ul>
+            <li><code>Ctrl + T</code>: Selecionar <strong>T</strong>udo. (No Excel/inglês é Ctrl+A).</li>
+            <li><code>Ctrl + L</code>: <strong>L</strong>ocalizar palavras no texto.</li>
+            <li><code>Ctrl + U</code>: S<strong>u</strong>bstituir palavras.</li>
+            <li><code>Ctrl + N</code>: <strong>N</strong>egrito.</li>
+            <li><code>Ctrl + S</code>: <strong>S</strong>ublinhado.</li>
+            <li><code>Ctrl + J</code>: <strong>J</strong>ustificar o texto (alinhar bordas esquerda e direita).</li>
+            <li><code>Ctrl + Z</code>: Desfa<strong>z</strong>er a última ação.</li>
+        </ul>`
+      },
+      {
+        title: "2.3 Excel: Fundamentos das Fórmulas",
+        content: `
+        <ul>
+            <li>Toda e qualquer fórmula ou função <strong>deve começar com o sinal de igual</strong> (<code>=</code>).</li>
+            <li><strong>Referência Relativa (Ex: A1):</strong> Se você copiar a fórmula para a linha de baixo, ela muda sozinha para A2.</li>
+            <li><strong>Referência Absoluta (Ex: $A$1):</strong> O cifrão (<span class="highlight">$</span>) TRAVA a referência. Se você arrastar a fórmula, ela continuará apontando fixa para A1. Pode travar só a coluna (<code>$A1</code>) ou só a linha (<code>A$1</code>).</li>
+            <li><strong>Dois pontos ( : ) vs Ponto e vírgula ( ; )</strong>: 
+                <br>• <code>A1:A5</code> significa "De A1 <strong>ATÉ</strong> A5" (Intervalo contínuo).
+                <br>• <code>A1;A5</code> significa "A1 <strong>E</strong> A5" (Células isoladas).
+            </li>
+        </ul>`
+      },
+      {
+        title: "2.4 Excel: Funções Básicas",
+        content: `
+        <ul>
+            <li><code>=SOMA(A1:A5)</code>: Soma todos os valores no intervalo.</li>
+            <li><code>=MÉDIA(A1:A5)</code>: Calcula a média aritmética. Ignora células com texto.</li>
+            <li><code>=MÁXIMO(A1:A5)</code>: Retorna o maior valor numérico do intervalo.</li>
+            <li><code>=MÍNIMO(A1:A5)</code>: Retorna o menor valor numérico do intervalo.</li>
+            <li><code>=MAIOR(A1:A5; 2)</code>: Retorna o 2º maior valor do intervalo.</li>
+        </ul>`
+      },
+      {
+        title: "2.5 Excel: Funções Avançadas e Lógicas",
+        content: `
+        <ul>
+            <li><code>=SE(teste_logico; valor_se_verdadeiro; valor_se_falso)</code>: Retorna um valor se a condição for V, e outro se for F. <em>Ex: =SE(A1>=7; "Aprovado"; "Reprovado")</em>.</li>
+            <li><code>=PROCV(valor_procurado; matriz_tabela; num_indice_coluna; [procurar_intervalo])</code>: Procura um valor na primeira coluna à vertical, e retorna o valor da linha correspondente.</li>
+            <li><code>=CONT.NÚM(A1:A10)</code>: Conta apenas as células que possuem números.</li>
+            <li><code>=CONT.VALORES(A1:A10)</code>: Conta todas as células que não estão vazias (tem texto, número, erro).</li>
+        </ul>`
+      },
+      {
+        title: "2.6 PowerPoint: Apresentações e Atalhos",
+        content: `
+        <ul>
+            <li><strong>Extensão Padrão:</strong> <code>.pptx</code>. Se salvo como <code>.ppsx</code>, o arquivo abre diretamente no modo Apresentação, sem abrir a tela de edição.</li>
+            <li><strong>Slide Mestre:</strong> Funciona como um "molde". Tudo que você insere nele (logotipo, fontes, fundos) é <span class="highlight">aplicado automaticamente a todos os slides</span>. Ideal para padronização.</li>
+            <li><strong>Transição vs Animação:</strong> <em>Transição</em> é o efeito de passagem de um slide inteiro para o outro. <em>Animação</em> é o efeito dado aos objetos DENTRO do slide (textos, imagens).</li>
+            <li><strong>Atalhos:</strong> <code>F5</code> inicia a apresentação do 1º slide. <code>Shift + F5</code> inicia a partir do slide atual.</li>
+        </ul>`
+      }
+    ]
+  },
+  {
+    title: "Redes de Computadores e Internet",
+    icon: "🌐",
+    cards: [
+      {
+        title: "3.1 Abrangência das Redes (Geográfica)",
+        content: `
+        <ul>
+            <li><strong>PAN (Personal Area Network):</strong> Rede pessoal, metros de distância. Ex: Bluetooth entre celular e fone.</li>
+            <li><strong>LAN (Local Area Network):</strong> Rede Local. Mesmo prédio ou campus. Alta velocidade.</li>
+            <li><strong>MAN (Metropolitan Area Network):</strong> Rede Metropolitana. Conecta filiais na mesma cidade.</li>
+            <li><strong>WAN (Wide Area Network):</strong> Rede de Longa Distância. Cobre países ou continentes. <span class="highlight">A Internet é a maior WAN.</span></li>
+        </ul>`
+      },
+      {
+        title: "3.2 Topologias Físicas",
+        content: `
+        <ul>
+            <li><strong>Estrela:</strong> Todos os computadores se conectam a um equipamento central (Switch). Se um cabo rompe, só aquele PC cai. A mais usada.</li>
+            <li><strong>Barramento (Bus):</strong> Todos usam um cabo central compartilhado. Se o cabo rompe, a rede cai toda.</li>
+            <li><strong>Anel (Ring):</strong> Conectados em círculo. O sinal passa de máquina em máquina.</li>
+            <li><strong>Malha (Mesh):</strong> Todos conectam com todos. Alta redundância. Muito usada na internet (roteadores).</li>
+        </ul>`
+      },
+      {
+        title: "3.3 Equipamentos de Rede",
+        content: `
+        <ul>
+            <li><strong>Switch (Comutador):</strong> Liga PCs em LAN (Estrela). Ele entrega dados <span class="highlight">apenas para o destinatário correto</span> usando endereço MAC (Camada 2).</li>
+            <li><strong>Roteador (Router):</strong> Conecta redes DIFERENTES (Ex: sua LAN à Internet). Escolhe a melhor rota usando IP (Camada 3).</li>
+            <li><strong>Access Point (AP):</strong> Ponto de acesso sem fio (Wi-Fi).</li>
+        </ul>`
+      },
+      {
+        title: "3.4 Protocolos Básicos: TCP/IP, IP, DHCP e DNS",
+        content: `
+        <ul>
+            <li><strong>IP (Internet Protocol):</strong> É o "CPF" da máquina. IPv4 tem 32 bits. IPv6 tem 128 bits.</li>
+            <li><strong>DNS (Domain Name System):</strong> "Lista telefônica". Transforma nomes fáceis (google.com) em IPs numéricos.</li>
+            <li><strong>DHCP:</strong> Entrega endereços IP dinamicamente para as máquinas quando elas se conectam na rede.</li>
+            <li><strong>TCP vs UDP:</strong> TCP garante a entrega (orientado a conexão). UDP é rápido, mas não garante a entrega (usado em streaming e jogos).</li>
+        </ul>`
+      },
+      {
+        title: "3.5 Internet, Intranet e Extranet",
+        content: `
+        <ul>
+            <li><strong>Internet:</strong> Rede global e pública.</li>
+            <li><strong>Intranet:</strong> Rede PRIVADA corporativa. <span class="highlight">Usa os mesmos protocolos (TCP/IP) da Internet!</span> A diferença é o acesso restrito.</li>
+            <li><strong>Extranet:</strong> Parte da Intranet disponibilizada para usuários externos (parceiros/clientes VIP), mediante login via internet.</li>
+        </ul>`
+      }
+    ]
+  },
+  {
+    title: "Navegadores Web e Buscadores",
+    icon: "🧭",
+    cards: [
+      {
+        title: "4.1 Conceitos Base e Motores",
+        content: `
+        <ul>
+            <li><strong>Edge (91+):</strong> Substituiu o Internet Explorer. Utiliza o motor <strong>Chromium</strong>.</li>
+            <li><strong>Firefox:</strong> Usa motor próprio chamado <strong>Quantum/Gecko</strong>. Fortíssimo apelo à privacidade.</li>
+            <li><strong>Cookies:</strong> Pequenos arquivos de texto salvos pelo navegador com preferências. <span class="highlight">Cookies NÃO carregam vírus.</span></li>
+            <li><strong>Cache:</strong> Guarda cópias de imagens e scripts dos sites para acelerar visitas futuras.</li>
+        </ul>`
+      },
+      {
+        title: "4.2 Atalhos Universais (Edge, Firefox, Chrome)",
+        content: `
+        <ul>
+            <li><code>Ctrl + T</code>: Nova Aba (<strong>T</strong>ab).</li>
+            <li><code>Ctrl + W</code>: Fecha Aba (<strong>W</strong>indow close).</li>
+            <li><code>Ctrl + Shift + T</code>: O milagre! <strong>Reabre a última aba</strong> fechada sem querer.</li>
+            <li><code>Ctrl + J</code>: Downloads (<strong>J</strong>ump).</li>
+            <li><code>Ctrl + H</code>: <strong>H</strong>istórico de navegação.</li>
+            <li><code>F11</code>: Tela cheia.</li>
+        </ul>`
+      },
+      {
+        title: "4.3 Navegação Privativa / InPrivate",
+        content: `
+        <p>No Edge (<code>Ctrl+Shift+N</code>), no Firefox (<code>Ctrl+Shift+P</code>).</p>
+        <ul>
+            <li><strong>O QUE FAZ:</strong> Apaga Histórico, Cookies e Senhas da sessão no <em>seu computador</em> ao fechar.</li>
+            <li><strong>O QUE NÃO FAZ:</strong> Ela <span class="highlight">NÃO oculta</span> sua navegação do seu provedor, chefe ou sites. <strong>Não é VPN!</strong> Também NÃO deleta os arquivos baixados.</li>
+        </ul>`
+      },
+      {
+        title: "4.4 Google: Busca Avançada",
+        content: `
+        <ul>
+            <li><strong>Busca Exata:</strong> <code>"concurso publico"</code> (obriga achar nessa exata ordem).</li>
+            <li><strong>Excluir termos:</strong> <code>jaguar -carro</code> (busca animal, exclui carro).</li>
+            <li><strong>Site Específico:</strong> <code>site:gov.br</code>.</li>
+            <li><strong>Tipo de Arquivo:</strong> <code>filetype:pdf apostilas</code>.</li>
+        </ul>`
+      }
+    ]
+  },
+  {
+    title: "Correio Eletrônico (E-mail)",
+    icon: "✉️",
+    cards: [
+      {
+        title: "5.1 Cabeçalho: Para, Cc e Cco",
+        content: `
+        <ul>
+            <li><strong>Para (To):</strong> Destinatários principais.</li>
+            <li><strong>Cc (Com Cópia):</strong> Destinatários secundários. Todos veem os endereços.</li>
+            <li><strong>Cco ou Bcc (Com Cópia Oculta):</strong> <span class="highlight">Oculta QUEM ESTÁ NO CCO.</span> Quem está no Para/Cc não vê quem está no Cco. Quem está no Cco vê o resto.</li>
+        </ul>`
+      },
+      {
+        title: "5.2 Responder vs Responder a Todos",
+        content: `
+        <ul>
+            <li><strong>Responder:</strong> A resposta vai APENAS para o remetente original.</li>
+            <li><strong>Responder a Todos:</strong> Resposta vai para Remetente + 'Para' + 'Cc'.</li>
+            <li><strong>Atenção:</strong> Quem estava em Cco JAMAIS recebe a "resposta a todos" para não ser revelado.</li>
+        </ul>`
+      },
+      {
+        title: "5.3 Protocolos de E-mail",
+        content: `
+        <ul>
+            <li><strong>SMTP (Envio):</strong> <strong>S</strong>ua <strong>M</strong>ensagem <strong>T</strong>á <strong>P</strong>artindo. Usado para ENVIAR. Usa porta 587 ou 465 (criptografada).</li>
+            <li><strong>POP3 (Receber/Puxar):</strong> Faz o download e <span class="highlight">APAGA do servidor</span>. Para ler offline em 1 PC.</li>
+            <li><strong>IMAP (Receber/Sincronizar):</strong> <strong>Acessa Múltiplos</strong>. Mantém e-mails no servidor e sincroniza pastas.</li>
+        </ul>`
+      },
+      {
+        title: "5.4 Webmail vs Cliente de E-mail",
+        content: `
+        <ul>
+            <li><strong>Webmail:</strong> Acesso pelo Navegador (gmail.com). Sem instalar apps.</li>
+            <li><strong>Cliente:</strong> Programa instalado localmente (Outlook, Thunderbird). Usam SMTP/IMAP ativamente.</li>
+        </ul>`
+      }
+    ]
+  },
+  {
+    title: "Redes Sociais Corporativas e Pessoais",
+    icon: "📱",
+    cards: [
+      {
+        title: "6.1 Conceitos e Algoritmos",
+        content: `
+        <ul>
+            <li><strong>Algoritmos de Recomendação:</strong> IA que analisa comportamento para mostrar o que prende você na tela.</li>
+            <li><strong>Bolha de Filtro (Echo Chamber):</strong> Efeito do algoritmo que mostra apenas opiniões que o usuário concorda, isolando-o de visões contrárias.</li>
+        </ul>`
+      },
+      {
+        title: "6.2 Principais Redes",
+        content: `
+        <ul>
+            <li><strong>X (Twitter):</strong> <em>Microblogging</em>. Tempo real, notícias rápidas, <code>#Hashtags</code> e <em>Trending Topics</em>.</li>
+            <li><strong>Instagram:</strong> Rede Mobile First com fortíssimo apelo visual (Imagem/Vídeo). <em>Stories</em> (24h) geram FOMO.</li>
+            <li><strong>Facebook:</strong> A rede mais abrangente. Funciona bem com <strong>Grupos</strong> e presencia corporativa via <strong>Fanpages</strong>.</li>
+            <li><strong>LinkedIn:</strong> Estritamente <strong>Profissional</strong>. Focada em B2B, recrutamento e networking.</li>
+            <li><strong>YouTube:</strong> Hospedagem de vídeos do Google. Canais e modelo de retenção.</li>
+        </ul>`
+      }
+    ]
+  },
+  {
+    title: "Segurança da Informação e Backups",
+    icon: "🛡️",
+    cards: [
+      {
+        title: "7.1 Princípios Básicos (D.I.C.A)",
+        content: `
+        <ul>
+            <li><strong>Disponibilidade:</strong> O sistema DEVE estar acessível.</li>
+            <li><strong>Integridade:</strong> Dados não podem ser alterados indevidamente.</li>
+            <li><strong>Confidencialidade:</strong> Sigilo absoluto. Acesso só autorizado. <span class="highlight">Garantida pela Criptografia.</span></li>
+            <li><strong>Autenticidade:</strong> Prova a identidade do autor (Não-repúdio). <span class="highlight">Garantida pela Assinatura Digital.</span></li>
+        </ul>`
+      },
+      {
+        title: "7.2 Vírus vs Worms",
+        content: `
+        <ul>
+            <li><strong>Vírus:</strong> <span class="highlight">PRECISA de arquivo hospedeiro</span> e PRECISA ser executado (clicado) pela vítima.</li>
+            <li><strong>Worm (Verme):</strong> AUTÔNOMO. NÃO precisa de hospedeiro. Se autorreplica explorando falhas de rede e causa <strong>lentidão</strong> na rede.</li>
+        </ul>`
+      },
+      {
+        title: "7.3 Ransomware e Trojan",
+        content: `
+        <ul>
+            <li><strong>Ransomware:</strong> O sequestrador digital! Ele criptografa todos os dados do HD e cobra um resgate (geralmente em Bitcoin).</li>
+            <li><strong>Trojan (Cavalo de Troia):</strong> Disfarce. Parece um programa legítimo, mas por trás abre portas (Backdoors) para invasores.</li>
+        </ul>`
+      },
+      {
+        title: "7.4 Spyware, Botnet e Phishing",
+        content: `
+        <ul>
+            <li><strong>Spyware:</strong> Programa espião. Ex: <em>Keylogger</em> (captura teclado) e <em>Screenlogger</em> (captura tela).</li>
+            <li><strong>Botnet:</strong> Rede de computadores zumbis usados para atacar servidores (Ataque DDoS).</li>
+            <li><strong>Phishing:</strong> Golpe de Engenharia Social. E-mails e sites falsos tentando roubar senhas ("pescador de dados").</li>
+        </ul>`
+      },
+      {
+        title: "7.5 Ferramentas de Segurança",
+        content: `
+        <ul>
+            <li><strong>Criptografia Simétrica:</strong> Mesma chave para cifrar e decifrar (rápida).</li>
+            <li><strong>Criptografia Assimétrica:</strong> Par de chaves (Pública e Privada). Mais segura.</li>
+            <li><strong>Assinatura Digital:</strong> Garante Autenticidade e Integridade usando HASH.</li>
+            <li><strong>Firewall:</strong> Filtra o TRÁFEGO de rede (Regras IP/Porta). <span class="highlight">Atenção: Firewall NÃO escaneia/apaga vírus!</span></li>
+            <li><strong>Antivírus:</strong> Analisa arquivos buscando código malicioso e os coloca em quarentena.</li>
+        </ul>`
+      },
+      {
+        title: "7.6 Backups e Nuvem",
+        content: `
+        <ul>
+            <li><strong>Backup Completo (Full):</strong> Demora para fazer, muito rápido para restaurar.</li>
+            <li><strong>Backup Incremental:</strong> Copia o que mudou desde o <strong>ÚLTIMO BACKUP</strong>. Rápido para fazer, demorado para restaurar (junta todas as partes).</li>
+            <li><strong>Backup Diferencial:</strong> Copia o que mudou desde o último <strong>Backup COMPLETO</strong>.</li>
+            <li><strong>Cloud Storage:</strong> Nuvem (Google Drive, OneDrive). Garante redundância de dados (não perde se o PC queimar).</li>
+        </ul>`
+      }
+    ]
+  }
+];
+
+let html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostila Completa - Informática (30 Páginas)</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <button class="floating-print-btn no-print" onclick="window.print()">🖨️ Imprimir Apostila (30+ Págs)</button>
+    
+    <div class="document-container">
+        <div class="header-cover">
+            <h1>📚 Apostila Estratégica Completa</h1>
+            <p class="subtitle">Informática para Concursos</p>
+            <p class="subtitle" style="color: #64748b; font-size: 22px;">Edição Foco Total e Aprofundada</p>
+            <div class="details">
+                <p>Contém teoria detalhada, esquemas rápidos e cadernos de erros/anotações em branco.</p>
+                <p style="margin-top: 15px;"><strong>Formato: 30 Páginas (A4 Retrato)</strong></p>
+            </div>
+        </div>
+`;
+
+temas.forEach((tema, idx) => {
+    html += `\n<h2 class="section-title"><span>${idx+1}</span> ${tema.title} ${tema.icon}</h2>\n`;
+    tema.cards.forEach(card => {
+        html += `
+        <div class="topic-card">
+            <h3>${card.title}</h3>
+            ${card.content}
+        </div>\n`;
+        
+        // Randomly add small notes blocks
+        if (Math.random() > 0.3) {
+             html += `<div class="notes-area"><h4>✏️ Notas e Dicas do Professor</h4><div class="lines"></div></div>\n`;
+        }
+    });
+
+    // Generate exactly 2 full pages of lined paper per topic
+    html += `
+    <div class="full-page-notes">
+        <h2>✏️ Caderno de Erros / Revisão Rápida: ${tema.title}</h2>
+        <div class="full-page-lines"></div>
+    </div>
+    <div class="full-page-notes">
+        <h2>🧠 Mapa Mental Livre: ${tema.title}</h2>
+        <div class="full-page-lines"></div>
+    </div>
+    `;
+});
+
+html += `
+    </div>
+</body>
+</html>`;
+
+fs.writeFileSync(path.join(__dirname, 'index.html'), html);
+console.log('HTML gerado com sucesso. Abra o arquivo no navegador.');
