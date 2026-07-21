@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apostila de Espanhol: As 2.000 Palavras Mais Usadas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-content">
+            <h1>🇪🇸 Domine o Espanhol</h1>
+            <p>As 2.000 palavras mais faladas por nativos, categorizadas e exemplificadas.</p>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar palavra, tradução ou categoria...">
+                <button class="print-btn" id="printBtn" title="Imprimir palavras na tela">🖨️ Imprimir</button>
+            </div>
+            
+            <div class="filter-container" id="filterContainer">
+                <button class="filter-btn active" data-filter="all">Todas</button>
+                <button class="filter-btn" data-filter="1">1. Substantivos</button>
+                <button class="filter-btn" data-filter="2">2. Verbos</button>
+                <button class="filter-btn" data-filter="3">3. Adjetivos</button>
+                <button class="filter-btn" data-filter="4">4. Conectivos</button>
+                <button class="filter-btn" data-filter="5">5. Advérbios</button>
+                <button class="filter-btn" data-filter="6">6. Pronomes</button>
+                <button class="filter-btn" data-filter="7">7. Interjeições</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="stats">
+            <span id="wordCount">Mostrando 0 palavras</span>
+        </div>
+        <div class="words-grid" id="wordsGrid">
+            <!-- Words will be injected here via JS -->
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
